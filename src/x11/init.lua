@@ -33,6 +33,7 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XUngrabPointer fun(display: x11.ffi.Display, time: number): number
 ---@field XGrabKeyboard fun(display: x11.ffi.Display, grab_window: number, owner_events: number, pointer_mode: number, keyboard_mode: number, time: number): number
 ---@field XUngrabKeyboard fun(display: x11.ffi.Display, time: number): number
+---@field XGetKeyboardMapping fun(display: x11.ffi.Display, first_keycode: number, keycode_count: number, keysyms_per_keycode_return: ffi.cdata*): ffi.cdata*
 ---@field XServerVendor fun(display: x11.ffi.Display): ffi.cdata*
 ---@field XStoreName fun(display: x11.ffi.Display, w: number, window_name: string): number
 ---@field XFetchName fun(display: x11.ffi.Display, w: number, window_name_return: ffi.cdata*): number
@@ -94,6 +95,22 @@ x11.grabPointer = C.XGrabPointer
 x11.ungrabPointer = C.XUngrabPointer
 x11.grabKeyboard = C.XGrabKeyboard
 x11.ungrabKeyboard = C.XUngrabKeyboard
+
+---@param display x11.ffi.Display
+---@param first_keycode number
+---@param keycode_count number
+---@return number[] keysyms, number keysyms_per_keycode
+function x11.getKeyboardMapping(display, first_keycode, keycode_count)
+	local keysyms_per_kc = ffi.new("int[1]")
+	local syms = C.XGetKeyboardMapping(display, first_keycode, keycode_count, keysyms_per_kc)
+	local n = keysyms_per_kc[0]
+	local result = {}
+	for i = 0, keycode_count * n - 1 do
+		result[i + 1] = tonumber(syms[i])
+	end
+	C.XFree(syms)
+	return result, n
+end
 x11.storeName = C.XStoreName
 
 ---@param display x11.ffi.Display

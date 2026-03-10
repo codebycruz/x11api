@@ -253,3 +253,16 @@ test.it("should be able to grab and ungrab the keyboard", function()
 	x11.ungrabKeyboard(display, 0)
 	x11.flush(display)
 end)
+
+test.it("should be able to get keyboard mapping", function()
+	local display = x11.openDisplay(nil)
+	test.notEqual(display, nil) ---@cast display -nil
+
+	-- Keycodes 8-255 are the valid range on X11
+	local first = 8
+	local count = 10
+	local syms, per_kc = x11.getKeyboardMapping(display, first, count)
+
+	test.notEqual(per_kc, 0)
+	test.equal(#syms, count * per_kc)
+end)

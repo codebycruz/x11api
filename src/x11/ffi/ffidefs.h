@@ -199,6 +199,9 @@ int XUngrabPointer(XDisplay display, XTime time);
 int XGrabKeyboard(XDisplay display, XWindow grab_window, XBool owner_events,
                   int pointer_mode, int keyboard_mode, XTime time);
 
+XKeySym *XGetKeyboardMapping(XDisplay display, unsigned int first_keycode,
+                             int keycode_count, int *keysyms_per_keycode_return);
+
 int XUngrabKeyboard(XDisplay display, XTime time);
 
 char *XServerVendor(XDisplay display);
