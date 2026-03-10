@@ -33,6 +33,18 @@ x11.EventMaskBits = {
 	SubstructureNotify = 0x00080000,
 }
 
+---@enum x11.ModifierMaskBits
+x11.ModifierMaskBits = {
+	Shift = 0x0001,
+	Lock = 0x0002,
+	Control = 0x0004,
+	Mod1 = 0x0008, -- Alt
+	Mod2 = 0x0010, -- NumLock
+	Mod3 = 0x0020,
+	Mod4 = 0x0040, -- Super/Win
+	Mod5 = 0x0080,
+}
+
 ---@enum x11.Icon
 x11.Icon = {
 	Arrow = 2,

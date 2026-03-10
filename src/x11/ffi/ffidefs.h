@@ -81,6 +81,24 @@ typedef struct {
   XBool same_screen;
 } XButtonEvent;
 
+typedef unsigned long XKeySym;
+
+typedef struct {
+  int type;
+  unsigned long serial;
+  XBool send_event;
+  XDisplay display;
+  XWindow window;
+  XWindow root;
+  XWindow subwindow;
+  XTime time;
+  int x, y;
+  int x_root, y_root;
+  unsigned int state;
+  unsigned int keycode;
+  XBool same_screen;
+} XKeyEvent;
+
 typedef struct {
   int type;
   unsigned long serial;
@@ -95,6 +113,7 @@ typedef union {
   XClientMessageEvent xclient;
   XExposeEvent xexpose;
   XConfigureEvent xconfigure;
+  XKeyEvent xkey;
   XMotionEvent xmotion;
   XButtonEvent xbutton;
   long pad[24];
@@ -157,3 +176,7 @@ XStatus XSendEvent(XDisplay display, XWindow w, XBool propagate,
                    long event_mask, XEvent *event_send);
 
 void XSync(XDisplay display, XBool discard);
+
+XKeySym XKeycodeToKeysym(XDisplay display, unsigned int keycode, int index);
+int XLookupString(XKeyEvent *event_struct, char *buffer_return, int bytes_buffer,
+                  XKeySym *keysym_return, void *status_in_out);

@@ -25,6 +25,8 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XChangeProperty fun(display: x11.ffi.Display, w: number, property: number, type: number, format: number, mode: number, data: string|ffi.cdata*, nelements: number)
 ---@field XSendEvent fun(display: x11.ffi.Display, w: number, propagate: number, event_mask: number, event_send: x11.ffi.Event): number
 ---@field XSync fun(display: x11.ffi.Display, discard: number)
+---@field XKeycodeToKeysym fun(display: x11.ffi.Display, keycode: number, index: number): number
+---@field XLookupString fun(event_struct: x11.ffi.Event, buffer_return: ffi.cdata*, bytes_buffer: number, keysym_return: ffi.cdata*, status_in_out: ffi.cdata*): number
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -32,6 +34,7 @@ local C = ffi.load("libX11.so.6")
 ---@field AtomArray fun(count: number): x11.ffi.Atom[]
 ---@field WindowAttributes fun(): x11.ffi.WindowAttributes
 ---@field Event fun(): x11.ffi.Event
+---@field KeySym ffi.ctype*
 local x11 = {}
 
 local enums = require("x11api.x11.ffi.enums")
@@ -54,6 +57,8 @@ defType("Atom")
 defType("WindowAttributes")
 defType("Event")
 
+x11.KeySym = ffi.typeof("XKeySym[1]")
+
 x11.openDisplay = C.XOpenDisplay
 x11.closeDisplay = C.XCloseDisplay
 x11.destroyWindow = C.XDestroyWindow
@@ -73,6 +78,17 @@ x11.freeCursor = C.XFreeCursor
 x11.flush = C.XFlush
 x11.sendEvent = C.XSendEvent
 x11.sync = C.XSync
+x11.keycodeToKeysym = C.XKeycodeToKeysym
+
+---@param event x11.ffi.Event
+---@return string char, number keysym
+function x11.lookupString(event)
+	local buf = ffi.new("char[32]")
+	local keysym = x11.KeySym()
+	local keyEvent = ffi.cast("XKeyEvent*", event)
+	local len = C.XLookupString(keyEvent, buf, 32, keysym, nil)
+	return ffi.string(buf, len), tonumber(keysym[0])
+end
 
 ---@param display x11.ffi.Display
 ---@param window number # Window id
