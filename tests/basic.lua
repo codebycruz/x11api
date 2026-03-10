@@ -2,6 +2,19 @@ local test = require("lpm-test")
 
 local x11 = require("x11api")
 
+-- Subscribe to StructureNotify, map the window, and drain events until MapNotify arrives.
+-- This ensures the window is actually viewable before proceeding, on any display server.
+local function mapWindowAndWait(display, window)
+	x11.selectInput(display, window, x11.EventMaskBits.StructureNotify)
+	x11.mapWindow(display, window)
+	x11.flush(display)
+
+	local event = x11.Event()
+	repeat
+		x11.nextEvent(display, event)
+	until event.type == x11.EventType.MapNotify
+end
+
 test.it("should be able to receive an event from itself", function()
 	local display = x11.openDisplay(nil)
 	test.notEqual(display, nil) ---@cast display -nil
@@ -113,8 +126,7 @@ test.it("should be able to warp and query the pointer", function()
 
 	local root = x11.defaultRootWindow(display)
 	local window = x11.createSimpleWindow(display, root, 0, 0, 200, 200, 0, 0, 0)
-	x11.mapWindow(display, window)
-	x11.flush(display)
+	mapWindowAndWait(display, window)
 
 	-- Warp to (50, 75) relative to the window
 	x11.warpPointer(display, 0, window, 0, 0, 0, 0, 50, 75)
@@ -123,4 +135,30 @@ test.it("should be able to warp and query the pointer", function()
 	local win_x, win_y = x11.queryPointer(display, window)
 	test.equal(win_x, 50)
 	test.equal(win_y, 75)
+end)
+
+test.it("should be able to grab and ungrab the pointer", function()
+	local display = x11.openDisplay(nil)
+	test.notEqual(display, nil) ---@cast display -nil
+
+	local root = x11.defaultRootWindow(display)
+	local window = x11.createSimpleWindow(display, root, 0, 0, 200, 200, 0, 0, 0)
+	mapWindowAndWait(display, window)
+
+	local mouseMask = bit.bor(
+		x11.EventMaskBits.ButtonPress,
+		x11.EventMaskBits.ButtonRelease,
+		x11.EventMaskBits.PointerMotion
+	)
+
+	local status = x11.grabPointer(
+		display, window, x11.False,
+		mouseMask,
+		x11.GrabMode.Async, x11.GrabMode.Async,
+		window, 0, 0
+	)
+	test.equal(status, x11.GrabStatus.Success)
+
+	x11.ungrabPointer(display, 0)
+	x11.flush(display)
 end)

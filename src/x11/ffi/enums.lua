@@ -45,6 +45,21 @@ x11.ModifierMaskBits = {
 	Mod5 = 0x0080,
 }
 
+---@enum x11.GrabMode
+x11.GrabMode = {
+	Sync = 0,
+	Async = 1,
+}
+
+---@enum x11.GrabStatus
+x11.GrabStatus = {
+	Success = 0,
+	AlreadyGrabbed = 1,
+	InvalidTime = 2,
+	NotViewable = 3,
+	Frozen = 4,
+}
+
 ---@enum x11.Icon
 x11.Icon = {
 	Arrow = 2,

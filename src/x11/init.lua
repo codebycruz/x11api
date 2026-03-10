@@ -29,6 +29,9 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XLookupString fun(event_struct: x11.ffi.Event, buffer_return: ffi.cdata*, bytes_buffer: number, keysym_return: ffi.cdata*, status_in_out: ffi.cdata*): number
 ---@field XWarpPointer fun(display: x11.ffi.Display, src_w: number, dest_w: number, src_x: number, src_y: number, src_width: number, src_height: number, dest_x: number, dest_y: number): number
 ---@field XQueryPointer fun(display: x11.ffi.Display, w: number, root_return: ffi.cdata*, child_return: ffi.cdata*, root_x_return: ffi.cdata*, root_y_return: ffi.cdata*, win_x_return: ffi.cdata*, win_y_return: ffi.cdata*, mask_return: ffi.cdata*): number
+---@field XGrabPointer fun(display: x11.ffi.Display, grab_window: number, owner_events: number, event_mask: number, pointer_mode: number, keyboard_mode: number, confine_to: number, cursor: number, time: number): number
+---@field XUngrabPointer fun(display: x11.ffi.Display, time: number): number
+---@field XServerVendor fun(display: x11.ffi.Display): ffi.cdata*
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -82,6 +85,14 @@ x11.sendEvent = C.XSendEvent
 x11.sync = C.XSync
 x11.keycodeToKeysym = C.XKeycodeToKeysym
 x11.warpPointer = C.XWarpPointer
+x11.grabPointer = C.XGrabPointer
+x11.ungrabPointer = C.XUngrabPointer
+
+---@param display x11.ffi.Display
+---@return string
+function x11.serverVendor(display)
+	return ffi.string(C.XServerVendor(display))
+end
 
 ---@param display x11.ffi.Display
 ---@param window number

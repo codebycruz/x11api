@@ -189,3 +189,11 @@ XBool XQueryPointer(XDisplay display, XWindow w, XWindow *root_return,
                     XWindow *child_return, int *root_x_return, int *root_y_return,
                     int *win_x_return, int *win_y_return,
                     unsigned int *mask_return);
+
+int XGrabPointer(XDisplay display, XWindow grab_window, XBool owner_events,
+                 unsigned int event_mask, int pointer_mode, int keyboard_mode,
+                 XWindow confine_to, XCursor cursor, XTime time);
+
+int XUngrabPointer(XDisplay display, XTime time);
+
+char *XServerVendor(XDisplay display);
