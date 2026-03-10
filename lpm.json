@@ -1,4 +1,7 @@
 {
 	"name": "x11api",
-	"version": "0.1.0"
+	"version": "0.1.0",
+	"devDependencies": {
+		"lpm-test": { "git": "https://github.com/codebycruz/lpm" }
+	}
 }
