@@ -16,6 +16,24 @@ local function setFullscreen(display, window, enable)
 	x11.sendEvent(display, root, x11.False, mask, ev)
 end
 
+-- Drain all pending events (flush stale events before an operation).
+local function drainEvents(display)
+	local event = x11.Event()
+	while x11.pending(display) > 0 do
+		x11.nextEvent(display, event)
+	end
+end
+
+-- Drain events until a ConfigureNotify with matching dimensions arrives.
+local function waitForConfigureSize(display, w, h)
+	local event = x11.Event()
+	repeat
+		x11.nextEvent(display, event)
+	until event.type == x11.EventType.ConfigureNotify
+		and event.xconfigure.width == w
+		and event.xconfigure.height == h
+end
+
 -- Subscribe to StructureNotify, map the window, and drain events until MapNotify arrives.
 -- This ensures the window is actually viewable before proceeding, on any display server.
 local function mapWindowAndWait(display, window)
@@ -265,4 +283,29 @@ test.it("should be able to get keyboard mapping", function()
 
 	test.notEqual(per_kc, 0)
 	test.equal(#syms, count * per_kc)
+end)
+
+test.it("should be able to resize and move a window", function()
+	local display = x11.openDisplay(nil)
+	test.notEqual(display, nil) ---@cast display -nil
+
+	local root = x11.defaultRootWindow(display)
+	local window = x11.createSimpleWindow(display, root, 0, 0, 100, 100, 0, 0, 0)
+	mapWindowAndWait(display, window)
+
+	-- Drain any stale ConfigureNotify events left over from mapping before resizing.
+	drainEvents(display)
+
+	x11.resizeWindow(display, window, 300, 200)
+	x11.flush(display)
+	waitForConfigureSize(display, 300, 200)
+
+	local attrs = x11.getWindowAttributes(display, window)
+	test.equal(attrs.width, 300)
+	test.equal(attrs.height, 200)
+
+	-- Move and confirm via another ConfigureNotify (size unchanged).
+	x11.moveWindow(display, window, 50, 75)
+	x11.flush(display)
+	waitForConfigureSize(display, 300, 200)
 end)

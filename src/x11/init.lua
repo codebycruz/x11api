@@ -35,6 +35,8 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XUngrabKeyboard fun(display: x11.ffi.Display, time: number): number
 ---@field XGetKeyboardMapping fun(display: x11.ffi.Display, first_keycode: number, keycode_count: number, keysyms_per_keycode_return: ffi.cdata*): ffi.cdata*
 ---@field XServerVendor fun(display: x11.ffi.Display): ffi.cdata*
+---@field XResizeWindow fun(display: x11.ffi.Display, w: number, width: number, height: number): number
+---@field XMoveWindow fun(display: x11.ffi.Display, w: number, x: number, y: number): number
 ---@field XStoreName fun(display: x11.ffi.Display, w: number, window_name: string): number
 ---@field XFetchName fun(display: x11.ffi.Display, w: number, window_name_return: ffi.cdata*): number
 ---@field XFree fun(data: ffi.cdata*)
@@ -111,6 +113,8 @@ function x11.getKeyboardMapping(display, first_keycode, keycode_count)
 	C.XFree(syms)
 	return result, n
 end
+x11.resizeWindow = C.XResizeWindow
+x11.moveWindow = C.XMoveWindow
 x11.storeName = C.XStoreName
 
 ---@param display x11.ffi.Display
