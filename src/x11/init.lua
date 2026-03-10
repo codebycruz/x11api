@@ -32,6 +32,9 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XGrabPointer fun(display: x11.ffi.Display, grab_window: number, owner_events: number, event_mask: number, pointer_mode: number, keyboard_mode: number, confine_to: number, cursor: number, time: number): number
 ---@field XUngrabPointer fun(display: x11.ffi.Display, time: number): number
 ---@field XServerVendor fun(display: x11.ffi.Display): ffi.cdata*
+---@field XStoreName fun(display: x11.ffi.Display, w: number, window_name: string): number
+---@field XFetchName fun(display: x11.ffi.Display, w: number, window_name_return: ffi.cdata*): number
+---@field XFree fun(data: ffi.cdata*)
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -87,6 +90,20 @@ x11.keycodeToKeysym = C.XKeycodeToKeysym
 x11.warpPointer = C.XWarpPointer
 x11.grabPointer = C.XGrabPointer
 x11.ungrabPointer = C.XUngrabPointer
+x11.storeName = C.XStoreName
+
+---@param display x11.ffi.Display
+---@param window number
+---@return string?
+function x11.fetchName(display, window)
+	local ptr = ffi.new("char*[1]")
+	local status = C.XFetchName(display, window, ptr)
+	if status == 0 or ptr[0] == nil then return nil end
+	local name = ffi.string(ptr[0])
+	C.XFree(ptr[0])
+	return name
+end
+
 
 ---@param display x11.ffi.Display
 ---@return string

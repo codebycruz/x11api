@@ -11,6 +11,8 @@ x11.EventType = {
 	ButtonPress = 4,
 	ButtonRelease = 5,
 	MotionNotify = 6,
+	FocusIn = 9,
+	FocusOut = 10,
 	UnmapNotify = 18,
 	MapNotify = 19,
 	ConfigureNotify = 22,
@@ -29,8 +31,10 @@ x11.EventMaskBits = {
 	ButtonRelease = 0x00000008,
 	PointerMotion = 0x00000040,
 	Exposure = 0x00008000,
+	FocusChange = 0x00200000,
 	StructureNotify = 0x00020000,
 	SubstructureNotify = 0x00080000,
+	SubstructureRedirect = 0x00100000,
 }
 
 ---@enum x11.ModifierMaskBits
