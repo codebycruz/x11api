@@ -26,12 +26,17 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XSendEvent fun(display: x11.ffi.Display, w: number, propagate: number, event_mask: number, event_send: x11.ffi.Event): number
 local C = ffi.load("libX11.so.6")
 
----@class x11
+---@class x11: x11.Enums
 ---@field Atom fun(): x11.ffi.Atom
 ---@field AtomArray fun(count: number): x11.ffi.Atom[]
 ---@field WindowAttributes fun(): x11.ffi.WindowAttributes
 ---@field Event fun(): x11.ffi.Event
 local x11 = {}
+
+local enums = require("x11api.x11.ffi.enums")
+for k, v in pairs(enums) do
+	x11[k] = v
+end
 
 ---@param ffiName string
 local function defType(ffiName)

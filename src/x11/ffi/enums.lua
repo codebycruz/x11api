@@ -1,3 +1,4 @@
+---@class x11.Enums
 local x11 = {}
 
 ---@enum x11.EventType
