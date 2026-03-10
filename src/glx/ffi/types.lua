@@ -1,0 +1,2 @@
+---@class x11.glx.ffi.Context: ffi.cdata*
+---@class x11.glx.ffi.FBConfig: ffi.cdata*
