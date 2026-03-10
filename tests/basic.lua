@@ -309,3 +309,27 @@ test.it("should be able to resize and move a window", function()
 	x11.flush(display)
 	waitForConfigureSize(display, 300, 200)
 end)
+
+test.it("should be able to unmap and raise a window", function()
+	local display = x11.openDisplay(nil)
+	test.notEqual(display, nil) ---@cast display -nil
+
+	local root = x11.defaultRootWindow(display)
+	local window = x11.createSimpleWindow(display, root, 0, 0, 100, 100, 0, 0, 0)
+	mapWindowAndWait(display, window)
+
+	x11.raiseWindow(display, window)
+	x11.flush(display)
+
+	-- Unmap and wait for UnmapNotify
+	x11.unmapWindow(display, window)
+	x11.flush(display)
+
+	local event = x11.Event()
+	repeat
+		x11.nextEvent(display, event)
+	until event.type == x11.EventType.UnmapNotify
+
+	local attrs = x11.getWindowAttributes(display, window)
+	test.equal(attrs.map_state, 0) -- IsUnmapped = 0
+end)

@@ -115,6 +115,8 @@ function x11.getKeyboardMapping(display, first_keycode, keycode_count)
 end
 x11.resizeWindow = C.XResizeWindow
 x11.moveWindow = C.XMoveWindow
+x11.unmapWindow = C.XUnmapWindow
+x11.raiseWindow = C.XRaiseWindow
 x11.storeName = C.XStoreName
 
 ---@param display x11.ffi.Display

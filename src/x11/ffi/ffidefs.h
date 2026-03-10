@@ -208,6 +208,8 @@ char *XServerVendor(XDisplay display);
 
 int XResizeWindow(XDisplay display, XWindow w, unsigned int width, unsigned int height);
 int XMoveWindow(XDisplay display, XWindow w, int x, int y);
+void XUnmapWindow(XDisplay display, XWindow w);
+int XRaiseWindow(XDisplay display, XWindow w);
 
 int XStoreName(XDisplay display, XWindow w, const char *window_name);
 XStatus XFetchName(XDisplay display, XWindow w, char **window_name_return);
