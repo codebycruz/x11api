@@ -180,3 +180,12 @@ void XSync(XDisplay display, XBool discard);
 XKeySym XKeycodeToKeysym(XDisplay display, unsigned int keycode, int index);
 int XLookupString(XKeyEvent *event_struct, char *buffer_return, int bytes_buffer,
                   XKeySym *keysym_return, void *status_in_out);
+
+int XWarpPointer(XDisplay display, XWindow src_w, XWindow dest_w,
+                 int src_x, int src_y, unsigned int src_width,
+                 unsigned int src_height, int dest_x, int dest_y);
+
+XBool XQueryPointer(XDisplay display, XWindow w, XWindow *root_return,
+                    XWindow *child_return, int *root_x_return, int *root_y_return,
+                    int *win_x_return, int *win_y_return,
+                    unsigned int *mask_return);

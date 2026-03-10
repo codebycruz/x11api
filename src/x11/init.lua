@@ -27,6 +27,8 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XSync fun(display: x11.ffi.Display, discard: number)
 ---@field XKeycodeToKeysym fun(display: x11.ffi.Display, keycode: number, index: number): number
 ---@field XLookupString fun(event_struct: x11.ffi.Event, buffer_return: ffi.cdata*, bytes_buffer: number, keysym_return: ffi.cdata*, status_in_out: ffi.cdata*): number
+---@field XWarpPointer fun(display: x11.ffi.Display, src_w: number, dest_w: number, src_x: number, src_y: number, src_width: number, src_height: number, dest_x: number, dest_y: number): number
+---@field XQueryPointer fun(display: x11.ffi.Display, w: number, root_return: ffi.cdata*, child_return: ffi.cdata*, root_x_return: ffi.cdata*, root_y_return: ffi.cdata*, win_x_return: ffi.cdata*, win_y_return: ffi.cdata*, mask_return: ffi.cdata*): number
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -34,7 +36,7 @@ local C = ffi.load("libX11.so.6")
 ---@field AtomArray fun(count: number): x11.ffi.Atom[]
 ---@field WindowAttributes fun(): x11.ffi.WindowAttributes
 ---@field Event fun(): x11.ffi.Event
----@field KeySym ffi.ctype*
+---@field KeySym fun(): number[]
 local x11 = {}
 
 local enums = require("x11api.x11.ffi.enums")
@@ -79,6 +81,22 @@ x11.flush = C.XFlush
 x11.sendEvent = C.XSendEvent
 x11.sync = C.XSync
 x11.keycodeToKeysym = C.XKeycodeToKeysym
+x11.warpPointer = C.XWarpPointer
+
+---@param display x11.ffi.Display
+---@param window number
+---@return number win_x, number win_y, number root_x, number root_y
+function x11.queryPointer(display, window)
+	local root = ffi.new("XWindow[1]")
+	local child = ffi.new("XWindow[1]")
+	local root_x = ffi.new("int[1]")
+	local root_y = ffi.new("int[1]")
+	local win_x = ffi.new("int[1]")
+	local win_y = ffi.new("int[1]")
+	local mask = ffi.new("unsigned int[1]")
+	C.XQueryPointer(display, window, root, child, root_x, root_y, win_x, win_y, mask)
+	return win_x[0], win_y[0], root_x[0], root_y[0]
+end
 
 ---@param event x11.ffi.Event
 ---@return string char, number keysym
@@ -87,7 +105,7 @@ function x11.lookupString(event)
 	local keysym = x11.KeySym()
 	local keyEvent = ffi.cast("XKeyEvent*", event)
 	local len = C.XLookupString(keyEvent, buf, 32, keysym, nil)
-	return ffi.string(buf, len), tonumber(keysym[0])
+	return ffi.string(buf, len), keysym[0]
 end
 
 ---@param display x11.ffi.Display

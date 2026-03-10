@@ -106,3 +106,21 @@ test.it("should be able to receive a key event from itself", function()
 
 	test.equal(x11.pending(display), 0)
 end)
+
+test.it("should be able to warp and query the pointer", function()
+	local display = x11.openDisplay(nil)
+	test.notEqual(display, nil) ---@cast display -nil
+
+	local root = x11.defaultRootWindow(display)
+	local window = x11.createSimpleWindow(display, root, 0, 0, 200, 200, 0, 0, 0)
+	x11.mapWindow(display, window)
+	x11.flush(display)
+
+	-- Warp to (50, 75) relative to the window
+	x11.warpPointer(display, 0, window, 0, 0, 0, 0, 50, 75)
+	x11.sync(display, x11.False)
+
+	local win_x, win_y = x11.queryPointer(display, window)
+	test.equal(win_x, 50)
+	test.equal(win_y, 75)
+end)
