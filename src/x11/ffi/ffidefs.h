@@ -152,3 +152,6 @@ void XFlush(XDisplay display);
 void XChangeProperty(XDisplay display, XWindow w, XAtom property, XAtom type,
                      int format, int mode, const unsigned char *data,
                      int nelements);
+
+XStatus XSendEvent(XDisplay display, XWindow w, XBool propagate,
+                   long event_mask, XEvent *event_send);

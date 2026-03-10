@@ -23,6 +23,7 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XFreeCursor fun(display: x11.ffi.Display, cursor: number)
 ---@field XFlush fun(display: x11.ffi.Display)
 ---@field XChangeProperty fun(display: x11.ffi.Display, w: number, property: number, type: number, format: number, mode: number, data: string|ffi.cdata*, nelements: number)
+---@field XSendEvent fun(display: x11.ffi.Display, w: number, propagate: number, event_mask: number, event_send: x11.ffi.Event): number
 local C = ffi.load("libX11.so.6")
 
 ---@class x11
@@ -64,6 +65,7 @@ x11.defineCursor = C.XDefineCursor
 x11.undefineCursor = C.XUndefineCursor
 x11.freeCursor = C.XFreeCursor
 x11.flush = C.XFlush
+x11.sendEvent = C.XSendEvent
 
 ---@param display x11.ffi.Display
 ---@param window number # Window id
