@@ -196,6 +196,11 @@ int XGrabPointer(XDisplay display, XWindow grab_window, XBool owner_events,
 
 int XUngrabPointer(XDisplay display, XTime time);
 
+int XGrabKeyboard(XDisplay display, XWindow grab_window, XBool owner_events,
+                  int pointer_mode, int keyboard_mode, XTime time);
+
+int XUngrabKeyboard(XDisplay display, XTime time);
+
 char *XServerVendor(XDisplay display);
 
 int XStoreName(XDisplay display, XWindow w, const char *window_name);

@@ -235,3 +235,21 @@ test.it("should be able to request fullscreen without error", function()
 	setFullscreen(display, window, false)
 	x11.flush(display)
 end)
+
+test.it("should be able to grab and ungrab the keyboard", function()
+	local display = x11.openDisplay(nil)
+	test.notEqual(display, nil) ---@cast display -nil
+
+	local root = x11.defaultRootWindow(display)
+	local window = x11.createSimpleWindow(display, root, 0, 0, 200, 200, 0, 0, 0)
+	mapWindowAndWait(display, window)
+
+	local status = x11.grabKeyboard(
+		display, window, x11.False,
+		x11.GrabMode.Async, x11.GrabMode.Async, 0
+	)
+	test.equal(status, x11.GrabStatus.Success)
+
+	x11.ungrabKeyboard(display, 0)
+	x11.flush(display)
+end)
