@@ -155,3 +155,5 @@ void XChangeProperty(XDisplay display, XWindow w, XAtom property, XAtom type,
 
 XStatus XSendEvent(XDisplay display, XWindow w, XBool propagate,
                    long event_mask, XEvent *event_send);
+
+void XSync(XDisplay display, XBool discard);
