@@ -40,6 +40,8 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XStoreName fun(display: x11.ffi.Display, w: number, window_name: string): number
 ---@field XFetchName fun(display: x11.ffi.Display, w: number, window_name_return: ffi.cdata*): number
 ---@field XFree fun(data: ffi.cdata*)
+---@field XGetEventData fun(display: x11.ffi.Display, cookie: x11.ffi.GenericEventCookie): boolean
+---@field XFreeEventData fun(display: x11.ffi.Display, cookie: x11.ffi.GenericEventCookie)
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -97,6 +99,8 @@ x11.grabPointer = C.XGrabPointer
 x11.ungrabPointer = C.XUngrabPointer
 x11.grabKeyboard = C.XGrabKeyboard
 x11.ungrabKeyboard = C.XUngrabKeyboard
+x11.getEventData = C.XGetEventData
+x11.freeEventData = C.XFreeEventData
 
 ---@param display x11.ffi.Display
 ---@param first_keycode number

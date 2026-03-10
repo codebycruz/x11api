@@ -18,6 +18,7 @@ x11.EventType = {
 	ConfigureNotify = 22,
 	DestroyNotify = 17,
 	CreateNotify = 16,
+	GenericEvent = 35,
 }
 
 x11.False = 0

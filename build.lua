@@ -8,7 +8,7 @@ local function read(p)
 	return content
 end
 
-local files = { "glx" .. separator .. "init.lua", "x11" .. separator .. "init.lua" }
+local files = { "glx" .. separator .. "init.lua", "x11" .. separator .. "init.lua", "xi2" .. separator .. "init.lua" }
 
 local escapes = {
 	["\\"] = "\\\\",

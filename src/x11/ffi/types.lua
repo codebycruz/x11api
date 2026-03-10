@@ -16,3 +16,11 @@
 ---@field xmotion { window: number, x: number, y: number }
 ---@field xbutton { x: number, y: number, button: number, state: number }
 ---@field xkey { window: number, root: number, time: number, x: number, y: number, x_root: number, y_root: number, state: number, keycode: number, same_screen: number }
+---@field xcookie x11.ffi.GenericEventCookie
+
+---@class x11.ffi.GenericEventCookie: ffi.cdata*
+---@field type number
+---@field extension number
+---@field evtype number
+---@field cookie number
+---@field data ffi.cdata*

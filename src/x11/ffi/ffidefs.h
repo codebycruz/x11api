@@ -107,6 +107,17 @@ typedef struct {
   XWindow window;
 } XAnyEvent;
 
+typedef struct {
+  int type;
+  unsigned long serial;
+  int send_event;
+  XDisplay display;
+  int extension;
+  int evtype;
+  unsigned int cookie;
+  void *data;
+} XGenericEventCookie;
+
 typedef union {
   int type;
   XAnyEvent xany;
@@ -116,6 +127,7 @@ typedef union {
   XKeyEvent xkey;
   XMotionEvent xmotion;
   XButtonEvent xbutton;
+  XGenericEventCookie xcookie;
   long pad[24];
 } XEvent;
 
@@ -214,3 +226,6 @@ int XRaiseWindow(XDisplay display, XWindow w);
 int XStoreName(XDisplay display, XWindow w, const char *window_name);
 XStatus XFetchName(XDisplay display, XWindow w, char **window_name_return);
 int XFree(void *data);
+
+int XGetEventData(XDisplay display, XGenericEventCookie *cookie);
+void XFreeEventData(XDisplay display, XGenericEventCookie *cookie);

@@ -1,0 +1,10 @@
+---@class x11.xi2.ffi.RawEvent: ffi.cdata*
+---@field type number
+---@field evtype number
+---@field deviceid number
+---@field sourceid number
+---@field detail number
+---@field flags number
+---@field time number
+---@field valuators { mask_len: number, mask: ffi.cdata*, values: ffi.cdata* }
+---@field raw_values ffi.cdata*
