@@ -1,4 +1,4 @@
-# x11api
+# x11api [![Tests](https://github.com/codebycruz/x11api/actions/workflows/tests.yml/badge.svg)](https://github.com/codebycruz/x11api/actions/workflows/tests.yml)
 
 X11 bindings for LuaJIT.
 
