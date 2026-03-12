@@ -1,6 +1,6 @@
 ---@class x11.xi2.ffi.RawEvent: ffi.cdata*
 ---@field type number
----@field evtype number
+---@field evtype x11.xi2.EventType
 ---@field deviceid number
 ---@field sourceid number
 ---@field detail number
