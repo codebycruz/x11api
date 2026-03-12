@@ -8,6 +8,14 @@ typedef unsigned long XColormap;
 typedef void *XScreen;
 typedef unsigned long XTime;
 typedef unsigned long XCursor;
+typedef unsigned long XPixmap;
+
+typedef struct {
+  unsigned long pixel;
+  unsigned short red, green, blue;
+  char flags;
+  char pad;
+} XColor;
 
 typedef struct {
   int type;
@@ -229,3 +237,7 @@ int XFree(void *data);
 
 int XGetEventData(XDisplay display, XGenericEventCookie *cookie);
 void XFreeEventData(XDisplay display, XGenericEventCookie *cookie);
+
+XCursor XCreatePixmapCursor(XDisplay display, XPixmap source, XPixmap mask,
+                             XColor *foreground_color, XColor *background_color,
+                             unsigned int x, unsigned int y);

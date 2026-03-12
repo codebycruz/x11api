@@ -42,6 +42,7 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XFree fun(data: ffi.cdata*)
 ---@field XGetEventData fun(display: x11.ffi.Display, cookie: x11.ffi.GenericEventCookie): boolean
 ---@field XFreeEventData fun(display: x11.ffi.Display, cookie: x11.ffi.GenericEventCookie)
+---@field XCreatePixmapCursor fun(display: x11.ffi.Display, source: number, mask: number, foreground_color: x11.ffi.Color, background_color: x11.ffi.Color, x: number, y: number): number
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -49,6 +50,7 @@ local C = ffi.load("libX11.so.6")
 ---@field AtomArray fun(count: number): x11.ffi.Atom[]
 ---@field WindowAttributes fun(): x11.ffi.WindowAttributes
 ---@field Event fun(): x11.ffi.Event
+---@field Color fun(): x11.ffi.Color
 ---@field KeySym fun(): number[]
 local x11 = {}
 
@@ -71,6 +73,7 @@ end
 defType("Atom")
 defType("WindowAttributes")
 defType("Event")
+defType("Color")
 
 x11.KeySym = ffi.typeof("XKeySym[1]")
 
@@ -101,6 +104,7 @@ x11.grabKeyboard = C.XGrabKeyboard
 x11.ungrabKeyboard = C.XUngrabKeyboard
 x11.getEventData = C.XGetEventData
 x11.freeEventData = C.XFreeEventData
+x11.createPixmapCursor = C.XCreatePixmapCursor
 
 ---@param display x11.ffi.Display
 ---@param first_keycode number

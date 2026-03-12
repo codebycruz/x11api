@@ -18,6 +18,14 @@
 ---@field xkey { window: number, root: number, time: number, x: number, y: number, x_root: number, y_root: number, state: number, keycode: number, same_screen: number }
 ---@field xcookie x11.ffi.GenericEventCookie
 
+---@class x11.ffi.Color: ffi.cdata*
+---@field pixel number
+---@field red number
+---@field green number
+---@field blue number
+---@field flags number
+---@field pad number
+
 ---@class x11.ffi.GenericEventCookie: ffi.cdata*
 ---@field type number
 ---@field extension number
