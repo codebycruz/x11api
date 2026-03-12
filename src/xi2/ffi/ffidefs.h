@@ -4,8 +4,8 @@ typedef unsigned long XWindow;
 /* XIEventMask passed to XISelectEvents */
 typedef struct {
   int deviceid;
-  unsigned char *mask;
   int mask_len;
+  unsigned char *mask;
 } XIEventMask;
 
 /* Double-precision valuator value */
