@@ -43,6 +43,8 @@ ffi.cdef([[#embed "x11/ffi/ffidefs.h"]])
 ---@field XGetEventData fun(display: x11.ffi.Display, cookie: x11.ffi.GenericEventCookie): boolean
 ---@field XFreeEventData fun(display: x11.ffi.Display, cookie: x11.ffi.GenericEventCookie)
 ---@field XCreatePixmapCursor fun(display: x11.ffi.Display, source: number, mask: number, foreground_color: x11.ffi.Color, background_color: x11.ffi.Color, x: number, y: number): number
+---@field XCreatePixmap fun(display: x11.ffi.Display, d: number, width: number, height: number, depth: number): number
+---@field XFreePixmap fun(display: x11.ffi.Display, pixmap: number)
 local C = ffi.load("libX11.so.6")
 
 ---@class x11: x11.Enums
@@ -105,6 +107,8 @@ x11.ungrabKeyboard = C.XUngrabKeyboard
 x11.getEventData = C.XGetEventData
 x11.freeEventData = C.XFreeEventData
 x11.createPixmapCursor = C.XCreatePixmapCursor
+x11.createPixmap = C.XCreatePixmap
+x11.freePixmap = C.XFreePixmap
 
 ---@param display x11.ffi.Display
 ---@param first_keycode number

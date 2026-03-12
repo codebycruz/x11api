@@ -241,3 +241,7 @@ void XFreeEventData(XDisplay display, XGenericEventCookie *cookie);
 XCursor XCreatePixmapCursor(XDisplay display, XPixmap source, XPixmap mask,
                              XColor *foreground_color, XColor *background_color,
                              unsigned int x, unsigned int y);
+
+XPixmap XCreatePixmap(XDisplay display, XWindow d, unsigned int width,
+                      unsigned int height, unsigned int depth);
+void XFreePixmap(XDisplay display, XPixmap pixmap);
